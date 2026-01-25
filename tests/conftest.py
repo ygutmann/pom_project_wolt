@@ -15,7 +15,7 @@ def setup_playwright():
 
         page.set_default_timeout(60_000)
 
-        page.goto("https://wolt.com/en/discovery", wait_until="domcontentloaded")
+        page.goto("https://wolt.com/en/isr", wait_until="domcontentloaded")
         page.wait_for_load_state("networkidle")
 
         yield page
