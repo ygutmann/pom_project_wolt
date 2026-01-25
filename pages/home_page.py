@@ -15,6 +15,8 @@ class HomePage:
 
     def select_city(self, city="Jerusalem"):
         page = self.page
+        page.goto("https://wolt.com/en/isr", wait_until="domcontentloaded")
+        page.wait_for_load_state("networkidle")
         for name in ["Accept all", "Allow", "Accept"]:
             btn = page.get_by_role("button", name=name)
             if btn.count() > 0 and btn.first.is_visible():
