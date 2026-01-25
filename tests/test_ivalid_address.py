@@ -2,6 +2,8 @@ from playwright.sync_api import expect
 
 def test_invalid_addresses(setup_playwright):
     page = setup_playwright
+    page.goto("https://wolt.com/en/isr", wait_until="domcontentloaded")
+    page.wait_for_load_state("networkidle")
 
     for name in ["Accept all", "Allow", "Accept"]:
         btn = page.get_by_role("button", name=name)
