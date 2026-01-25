@@ -12,14 +12,15 @@ class HomePage:
     def open(self):
         self.page.goto(self.url)
 
-
     def select_city(self):
-        search = self.page.get_by_placeholder("Enter delivery address")
+        page = self.page
+        page.wait_for_url("**/discovery**", timeout=60_000)
+        cookies_btn = page.get_by_role("button", name="Accept all")
+        if cookies_btn.is_visible():
+            cookies_btn.click()
+        search = page.get_by_placeholder("Enter delivery address")
+        expect(search).to_be_visible(timeout=60_000)
         search.click()
-        search.fill("Jerusalem")
-        expect(self.page.locator('[role="option"]').first).to_be_visible(timeout=10000)
-        self.page.keyboard.press("ArrowDown")
-        self.page.keyboard.press("Enter")
 
 
     def expect_home_visible(self, timeout: int = 15000):

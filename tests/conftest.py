@@ -1,17 +1,22 @@
+import os
 import pytest
 from playwright.sync_api import sync_playwright
-
-BASE_URL = "https://wolt.com/en/isr"
 
 @pytest.fixture(scope="session")
 def setup_playwright():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(viewport={"width": 1400, "height": 900})
+
+        headless = os.getenv("CI", "false").lower() == "true"
+        browser = p.chromium.launch(headless=headless)
+
+        context = browser.new_context()
         page = context.new_page()
 
-        page.goto(BASE_URL)
-        page.get_by_role("button", name="Allow").click()
+
+        page.set_default_timeout(60_000)
+
+        page.goto("https://wolt.com/en/discovery", wait_until="domcontentloaded")
+        page.wait_for_load_state("networkidle")
 
         yield page
 
